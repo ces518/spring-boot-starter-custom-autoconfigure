@@ -1,5 +1,7 @@
 package me.june;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,13 +12,22 @@ import org.springframework.context.annotation.Configuration;
  * Time: 23:13
  **/
 @Configuration
+/**
+ * Properties로 설정하는 클래스를 import한다
+ */
+@EnableConfigurationProperties(HolomanProperties.class)
 public class HolomanConfiguration {
 
+    /**
+     * 해당 타입의 빈이 없을때만 빈을 등록하도록 설정
+     * @return
+     */
     @Bean
-    public HoloMan holoMan() {
+    @ConditionalOnMissingBean
+    public HoloMan holoMan(HolomanProperties properties) {
         HoloMan holoMan = new HoloMan();
-        holoMan.setHowLong(100);
-        holoMan.setName("june");
+        holoMan.setHowLong(properties.getHowlong());
+        holoMan.setName(properties.getName());
         return holoMan;
     }
 }
